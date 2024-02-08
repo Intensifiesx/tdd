@@ -16,7 +16,8 @@ from src.counter import app
 # Import the file that contains the status codes
 from src import status
 
-class CounterTest(TestCase):  
+
+class CounterTest(TestCase):
     """Counter tests"""
 
     def setUp(self):
