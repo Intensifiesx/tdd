@@ -2,19 +2,17 @@
 Test Cases for Counter Web Service
 
 Create a service that can keep track of multiple counters:
-- API must be RESTful, following the guidelines specified in status.py.
-- The endpoint should be called /counters.
-- When creating a counter, specify the name in the path.
-- Duplicate names must return a conflict error code.
-- The service must be able to update a counter by name.
-- The service must be able to read the counter.
+-API must be RESTful, following the guidelines specified in status.py.
+-The endpoint should be called /counters.
+-When creating a counter, specify the name in the path.
+-Duplicate names must return a conflict error code.
+-The service must be able to update a counter by name.
+-The service must be able to read the counter.
 """
 
 from unittest import TestCase
-
 # Import the unit under test - counter
 from src.counter import app
-
 # Import the file that contains the status codes
 from src import status
 
