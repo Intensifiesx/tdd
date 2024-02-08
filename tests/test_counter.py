@@ -10,3 +10,63 @@ how to call the web service and assert what it should return.
 - The service must be able to update a counter by name.
 - The service must be able to read the counter
 """
+from unittest import TestCase
+
+# we need to import the unit under test - counter
+from src.counter import app 
+
+# we need to import the file that contains the status codes
+from src import status 
+
+class CounterTest(TestCase):
+    """Counter tests"""
+    def test_create_a_counter(self):
+        """It should create a counter"""
+        client = app.test_client()
+        result = client.post('/counters/foo')
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+    
+    def setUp(self):
+        """Test setup"""
+        self.client = app.test_client()
+        self.client.testing = True
+        
+    def test_duplicate_a_counter(self):
+        """It should return an error for duplicates"""
+        result = self.client.post('/counters/bar')
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+        result = self.client.post('/counters/bar')
+        self.assertEqual(result.status_code, status.HTTP_409_CONFLICT)
+    
+    def test_update_a_counter(self):
+        """It should update a counter"""
+        #Make a call to Create a counter.
+        result = self.client.post('/counters/updating')
+        #Ensure that it returned a successful return code.
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+        #Check the counter value as a baseline.
+        baseline = self.client.get('/counters/updating')
+        #Make a call to Update the counter that you just created.
+        result = self.client.post('/counters/updating')
+        self.assertEqual(result.status_code, status.HTTP_200_OK)
+        #Check that the counter value is one more than the baseline you measured in step 3.
+        updated = self.client.get('/counters/updating')
+        self.assertEqual(baseline, updated - 1)
+    
+    def test_read_a_counter(self):
+        """It should read a counter"""
+        result = self.client.post('/counters/read')
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+        result = self.client.get('/counters/read')
+        self.assertEqual(result.status_code, status.HTTP_200_OK)
+        
+    def test_delete_a_counter(self):
+        """It should delete a counter"""
+        result = self.client.post('/counters/foo_delete')
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+        result = self.client.delete('/counters/foo_delete')
+        self.assertEqual(result.status_code, status.HTTP_204_NO_CONTENT)
+        result = self.client.get('/counters/foo_delete')
+        self.assertEqual(result.status_code, status.HTTP_404_NOT_FOUND)
+
+    
