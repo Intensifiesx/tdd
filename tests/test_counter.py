@@ -13,10 +13,10 @@ Create a service that can keep track of multiple counters:
 from unittest import TestCase
 
 # Import the unit under test - counter
-from src.counter import app 
+from src.counter import app
 
 # Import the file that contains the status codes
-from src import status 
+from src import status
 
 class CounterTest(TestCase):
     """Counter tests"""
