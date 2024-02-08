@@ -18,23 +18,23 @@ from src import status
 
 class CounterTest(TestCase):
     """Counter tests"""
-    
+
     def setUp(self):
         """Test setup"""
         self.client = app.test_client()
         self.client.testing = True
-        
+
     def test_create_counter(self):
         """Test creating a counter"""
         response = self.client.post('/counters/foo')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    
+
     def test_duplicate_counter(self):
         """Test handling duplicate counters"""
         self.client.post('/counters/bar')
         response = self.client.post('/counters/bar')
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
-    
+
     def test_update_counter(self):
         """Test updating a counter"""
         # Create a counter
@@ -46,13 +46,13 @@ class CounterTest(TestCase):
         updated_response = self.client.get('/counters/updating')
         updated_data = updated_response.get_json()
         self.assertEqual(updated_data['value'], 1)  # Assuming the initial value is 0
-    
+
     def test_read_counter(self):
         """Test reading a counter"""
         self.client.post('/counters/read')
         response = self.client.get('/counters/read')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+
     def test_delete_counter(self):
         """Test deleting a counter"""
         self.client.post('/counters/foo_delete')
